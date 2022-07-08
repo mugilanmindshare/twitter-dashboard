@@ -24,4 +24,4 @@ streamlit-card
 streamlit-option-menu
 toml
 wordcloud
-psycopg2
+psycopg2-binary
