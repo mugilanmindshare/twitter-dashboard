@@ -109,233 +109,231 @@ hour_data = hour_wise_twitter_metrics(selected_leader_ul_data)
 
 
 
-def show():
 
-    selected_wordcloud_data = selected_leader_ul_data.copy()
-    selected_overall_wordcloud_data = selected_wordcloud_data[['username','tweets_no_stopwords']]
-    selected_positive_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Positive']
-    selected_negative_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Negative'] 
-    selected_neutral_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Neutral']
-    overall_hashtag = selected_wordcloud_data[['username','hashtag']]
-
-
-    selected_diff = pd.to_datetime(str(to_date), format='%Y-%m-%d') - pd.to_datetime(str(from_date), format='%Y-%m-%d')
-    selected_day_diff = selected_diff.days
-
-    if selected_day_diff > 730:
-        c1,c2 = st.columns((5,1))
-        with c1:
-            level = st.radio("Please select Level for Graph",('Hour','Day','Week','Month','Year'))
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
-        with c2:
-            total_tweet = hour_data['total_tweets'].tolist()
-            st.metric('Total Tweets',sum(total_tweet),delta = None)
-    elif selected_day_diff > 60:
-        c1,c2 = st.columns((5,1))
-        with c1:
-            level = st.radio("Please select Level for Graph",('Hour','Day','Week','Month'))
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
-        with c2:
-            total_tweet = hour_data['total_tweets'].tolist()
-            st.metric('Total Tweets',sum(total_tweet),delta = None)    
-    elif selected_day_diff > 14:
-        c1,c2 = st.columns((5,1))
-        with c1:
-            level = st.radio("Please select Level for Graph",('Hour','Day','Week'))
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
-        with c2:
-            total_tweet = hour_data['total_tweets'].tolist()
-            st.metric('Total Tweets',sum(total_tweet),delta = None)    
-    elif selected_day_diff > 1:
-        c1,c2 = st.columns((5,1))
-        with c1:
-            level = st.radio("Please select Level for Graph",('Hour','Day'))
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
-        with c2:
-            total_tweet = hour_data['total_tweets'].tolist()
-            st.metric('Total Tweets',sum(total_tweet),delta = None)    
-    else:
-        c1,c2 = st.columns((5,1))
-        with c1:
-            level = st.radio("Please select Level for Graph",(['Hour']))
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
-        with c2:
-            total_tweet = hour_data['total_tweets'].tolist()
-            st.metric('Total Tweets',sum(total_tweet),delta = None)
-
-    if level == 'Year':
-        col1,col2=st.columns((3,3))
-        with col1:
-            year_wise_total_tweets_plot(year_data)
-        with col2:
-            year_wise_total_likes_plot(year_data)
-        col111,col222=st.columns((3,3))
-        with col111:
-            year_wise_total_replies_plot(year_data)
-        with col222:
-            year_wise_total_retweets_plot(year_data)    
-        col11,col12=st.columns((3,3))
-        with col11:   
-            year_wise_total_quotes_plot(year_data)
-        with col12:
-            fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
-            st.plotly_chart(fig,use_container_width = True)  
-
-    elif level == 'Month':
-        m1,m2=st.columns((3,3))
-        with m1:
-            month_wise_total_tweets_plot(month_data)
-        with m2:
-            month_wise_total_likes_plot(month_data)
-        m3,m4=st.columns((3,3))
-        with m3:   
-            month_wise_total_replies_plot(month_data)
-        with m4:
-            month_wise_total_retweets_plot(month_data)
-        m5,m6=st.columns((3,3))
-        with m5:
-            month_wise_total_quotes_plot(month_data)
-        with m6:
-            fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
-            st.plotly_chart(fig,use_container_width = True)    
-
-    elif level == 'Week':
-        w1,w2=st.columns((3,3))
-        with w1:
-            week_wise_total_tweets_plot(week_data)
-        with w2:
-            week_wise_total_likes_plot(week_data)    
-        w3,w4 = st.columns((3,3))
-        with w3:
-            week_wise_total_replies_plot(week_data)
-        with w4:
-            week_wise_total_retweets_plot(week_data)  
-        w5,w6=st.columns((3,3))
-        with w5:
-            week_wise_total_quotes_plot(week_data)
-        with w6:
-            fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
-            st.plotly_chart(fig,use_container_width = True)           
+selected_wordcloud_data = selected_leader_ul_data.copy()
+selected_overall_wordcloud_data = selected_wordcloud_data[['username','tweets_no_stopwords']]
+selected_positive_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Positive']
+selected_negative_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Negative'] 
+selected_neutral_wordcloud_data = selected_wordcloud_data[selected_wordcloud_data['vader_sentiment'] == 'Neutral']
+overall_hashtag = selected_wordcloud_data[['username','hashtag']]
 
 
-    elif level == 'Day':
-        d1, d2 = st.columns((3,3))
-        with d1:
-            day_wise_total_tweets_plot(day_data)
-        with d2:
-            day_wise_total_likes_plot(day_data)
-        d3,d4 = st.columns((3,3))
-        with d3:
-            day_wise_total_replies_plot(day_data)
-        with d4:
-            day_wise_total_retweets_plot(day_data)
-        d5, d6 = st.columns ((3,3))
-        with d5:
-            day_wise_total_quotes_plot(day_data)  
-        with d6:
-            fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
-            st.plotly_chart(fig,use_container_width = True)            
-    else:
-        h1, h2 = st.columns((3,3))
-        with h1:
-            hour_wise_total_tweets_plot(hour_data)
-        with h2:
-            hour_wise_total_likes_plot(hour_data)
-        h3, h4 = st.columns((3,3))
-        with h3:
-            hour_wise_total_replies_plot(hour_data)
-        with h4:
-            hour_wise_total_retweets_plot(hour_data)
-        h5, h6 = st.columns((3,3))
-        with h5:
-            hour_wise_total_quotes_plot(hour_data)    
-        with h6:
-            fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
-            st.plotly_chart(fig,use_container_width = True)        
+selected_diff = pd.to_datetime(str(to_date), format='%Y-%m-%d') - pd.to_datetime(str(from_date), format='%Y-%m-%d')
+selected_day_diff = selected_diff.days
+
+if selected_day_diff > 730:
+    c1,c2 = st.columns((5,1))
+    with c1:
+        level = st.radio("Please select Level for Graph",('Hour','Day','Week','Month','Year'))
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
+    with c2:
+        total_tweet = hour_data['total_tweets'].tolist()
+        st.metric('Total Tweets',sum(total_tweet),delta = None)
+elif selected_day_diff > 60:
+    c1,c2 = st.columns((5,1))
+    with c1:
+        level = st.radio("Please select Level for Graph",('Hour','Day','Week','Month'))
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
+    with c2:
+        total_tweet = hour_data['total_tweets'].tolist()
+        st.metric('Total Tweets',sum(total_tweet),delta = None)    
+elif selected_day_diff > 14:
+    c1,c2 = st.columns((5,1))
+    with c1:
+        level = st.radio("Please select Level for Graph",('Hour','Day','Week'))
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
+    with c2:
+        total_tweet = hour_data['total_tweets'].tolist()
+        st.metric('Total Tweets',sum(total_tweet),delta = None)    
+elif selected_day_diff > 1:
+    c1,c2 = st.columns((5,1))
+    with c1:
+        level = st.radio("Please select Level for Graph",('Hour','Day'))
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
+    with c2:
+        total_tweet = hour_data['total_tweets'].tolist()
+        st.metric('Total Tweets',sum(total_tweet),delta = None)    
+else:
+    c1,c2 = st.columns((5,1))
+    with c1:
+        level = st.radio("Please select Level for Graph",(['Hour']))
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>',unsafe_allow_html=True)
+    with c2:
+        total_tweet = hour_data['total_tweets'].tolist()
+        st.metric('Total Tweets',sum(total_tweet),delta = None)
+
+if level == 'Year':
+    col1,col2=st.columns((3,3))
+    with col1:
+        year_wise_total_tweets_plot(year_data)
+    with col2:
+        year_wise_total_likes_plot(year_data)
+    col111,col222=st.columns((3,3))
+    with col111:
+        year_wise_total_replies_plot(year_data)
+    with col222:
+        year_wise_total_retweets_plot(year_data)    
+    col11,col12=st.columns((3,3))
+    with col11:   
+        year_wise_total_quotes_plot(year_data)
+    with col12:
+        fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
+        st.plotly_chart(fig,use_container_width = True)  
+
+elif level == 'Month':
+    m1,m2=st.columns((3,3))
+    with m1:
+        month_wise_total_tweets_plot(month_data)
+    with m2:
+        month_wise_total_likes_plot(month_data)
+    m3,m4=st.columns((3,3))
+    with m3:   
+        month_wise_total_replies_plot(month_data)
+    with m4:
+        month_wise_total_retweets_plot(month_data)
+    m5,m6=st.columns((3,3))
+    with m5:
+        month_wise_total_quotes_plot(month_data)
+    with m6:
+        fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
+        st.plotly_chart(fig,use_container_width = True)    
+
+elif level == 'Week':
+    w1,w2=st.columns((3,3))
+    with w1:
+        week_wise_total_tweets_plot(week_data)
+    with w2:
+        week_wise_total_likes_plot(week_data)    
+    w3,w4 = st.columns((3,3))
+    with w3:
+        week_wise_total_replies_plot(week_data)
+    with w4:
+        week_wise_total_retweets_plot(week_data)  
+    w5,w6=st.columns((3,3))
+    with w5:
+        week_wise_total_quotes_plot(week_data)
+    with w6:
+        fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
+        st.plotly_chart(fig,use_container_width = True)           
 
 
-
-
-    hashtagg_data = find_hashtag_fre(selected_leader_ul_data)
-    hashtagg_category_data = hastags_category_fun(hashtagg_data)
-
-    mensions_data = find_mentions_fre(selected_wordcloud_data)
-    mensions_category_data = mentions_category_fun(mensions_data)
-
-
-    over_all_wordcloud_expander = st.expander(label='Overall WordCloud')
-    with over_all_wordcloud_expander:
-        ex_col1,ex_col2 = st.columns((3,3)) 
-        with ex_col1:
-            overall_wordcloud(selected_wordcloud_data['tweets_no_stopwords'])
-        with ex_col2:
-            overall_hashtag_plot(hashtagg_category_data)
-        overall_mentions_plot(mensions_category_data)        
-
-
-    posword_col,negword_col,neuword_col = st.columns((1,1,1))
-    with posword_col:
-        positive_wordcloud_expander = st.expander(label='Positive WordCloud')
-        with positive_wordcloud_expander:
-            positive_wordcloud(selected_positive_wordcloud_data['tweets_no_stopwords'])
-    with negword_col:
-        negative_wordcloud_expander = st.expander(label='Negative WordCloud')
-        with negative_wordcloud_expander:
-            negative_wordcloud(selected_negative_wordcloud_data['tweets_no_stopwords'])
-    with neuword_col:
-        neutral_wordcloud_expander = st.expander(label='Neutral WordCloud')
-        with neutral_wordcloud_expander:
-            neutral_wordcloud(selected_neutral_wordcloud_data['tweets_no_stopwords'])
+elif level == 'Day':
+    d1, d2 = st.columns((3,3))
+    with d1:
+        day_wise_total_tweets_plot(day_data)
+    with d2:
+        day_wise_total_likes_plot(day_data)
+    d3,d4 = st.columns((3,3))
+    with d3:
+        day_wise_total_replies_plot(day_data)
+    with d4:
+        day_wise_total_retweets_plot(day_data)
+    d5, d6 = st.columns ((3,3))
+    with d5:
+        day_wise_total_quotes_plot(day_data)  
+    with d6:
+        fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
+        st.plotly_chart(fig,use_container_width = True)            
+else:
+    h1, h2 = st.columns((3,3))
+    with h1:
+        hour_wise_total_tweets_plot(hour_data)
+    with h2:
+        hour_wise_total_likes_plot(hour_data)
+    h3, h4 = st.columns((3,3))
+    with h3:
+        hour_wise_total_replies_plot(hour_data)
+    with h4:
+        hour_wise_total_retweets_plot(hour_data)
+    h5, h6 = st.columns((3,3))
+    with h5:
+        hour_wise_total_quotes_plot(hour_data)    
+    with h6:
+        fig = px.bar(leader_ul_overall_sentiment, x = leader_ul_overall_sentiment['vader_sentiment'], y = leader_ul_overall_sentiment['id'], color = leader_ul_overall_sentiment['username'],title='Overall Sentiment Frequency')
+        st.plotly_chart(fig,use_container_width = True)        
 
 
 
 
+hashtagg_data = find_hashtag_fre(selected_leader_ul_data)
+hashtagg_category_data = hastags_category_fun(hashtagg_data)
+
+mensions_data = find_mentions_fre(selected_wordcloud_data)
+mensions_category_data = mentions_category_fun(mensions_data)
 
 
-    hashtag_analysis_expander = st.expander(label='Hashtag Analysis')
-    with hashtag_analysis_expander:
-        hashtag_col1,hashtag_col2 = st.columns(2)
-        with hashtag_col1:
-            uni_hashtag_plot(hashtagg_category_data)
-        with hashtag_col2:
-            bi_hashtag_plot(hashtagg_category_data)
-        
+over_all_wordcloud_expander = st.expander(label='Overall WordCloud')
+with over_all_wordcloud_expander:
+    ex_col1,ex_col2 = st.columns((3,3)) 
+    with ex_col1:
+        overall_wordcloud(selected_wordcloud_data['tweets_no_stopwords'])
+    with ex_col2:
+        overall_hashtag_plot(hashtagg_category_data)
+    overall_mentions_plot(mensions_category_data)        
 
-        hashtag_col3,hashtag_col4 = st.columns(2)
-        with hashtag_col3:
-            tri_hashtag_plot(hashtagg_category_data)        
-        with hashtag_col4:
-            multi_hashtag_plot(hashtagg_category_data)
+
+posword_col,negword_col,neuword_col = st.columns((1,1,1))
+with posword_col:
+    positive_wordcloud_expander = st.expander(label='Positive WordCloud')
+    with positive_wordcloud_expander:
+        positive_wordcloud(selected_positive_wordcloud_data['tweets_no_stopwords'])
+with negword_col:
+    negative_wordcloud_expander = st.expander(label='Negative WordCloud')
+    with negative_wordcloud_expander:
+        negative_wordcloud(selected_negative_wordcloud_data['tweets_no_stopwords'])
+with neuword_col:
+    neutral_wordcloud_expander = st.expander(label='Neutral WordCloud')
+    with neutral_wordcloud_expander:
+        neutral_wordcloud(selected_neutral_wordcloud_data['tweets_no_stopwords'])
 
 
 
 
 
 
-    mentions_analysis_expander = st.expander(label='Mentions Analysis')
-    with mentions_analysis_expander:
-        mentions_col1,mentions_col2 = st.columns(2)
-        with mentions_col1:
-            uni_mentions_plot(mensions_category_data)
-        with mentions_col2:
-            bi_mentions_plot(mensions_category_data)
-        tri_mentions_plot(mensions_category_data)        
+hashtag_analysis_expander = st.expander(label='Hashtag Analysis')
+with hashtag_analysis_expander:
+    hashtag_col1,hashtag_col2 = st.columns(2)
+    with hashtag_col1:
+        uni_hashtag_plot(hashtagg_category_data)
+    with hashtag_col2:
+        bi_hashtag_plot(hashtagg_category_data)
+    
 
-        multi_mentions_plot(mensions_category_data)
-
-
-
-    leaders_performance_data = leaders_overall_performance(leader_ul_data)
-    leaders_performance_data = leaders_performance_data[(leaders_performance_data['username']).isin(add_selectbox)]
-    leader_overall_performance_radar_chart(leaders_performance_data)
-
-    selected_leaders_performance_data = leaders_overall_performance(selected_leader_ul_data)
-
-    leader_overall_performance_radar_chart(selected_leaders_performance_data)
+    hashtag_col3,hashtag_col4 = st.columns(2)
+    with hashtag_col3:
+        tri_hashtag_plot(hashtagg_category_data)        
+    with hashtag_col4:
+        multi_hashtag_plot(hashtagg_category_data)
 
 
-if showbutton:
-    show()
+
+
+
+
+mentions_analysis_expander = st.expander(label='Mentions Analysis')
+with mentions_analysis_expander:
+    mentions_col1,mentions_col2 = st.columns(2)
+    with mentions_col1:
+        uni_mentions_plot(mensions_category_data)
+    with mentions_col2:
+        bi_mentions_plot(mensions_category_data)
+    tri_mentions_plot(mensions_category_data)        
+
+    multi_mentions_plot(mensions_category_data)
+
+
+
+leaders_performance_data = leaders_overall_performance(leader_ul_data)
+leaders_performance_data = leaders_performance_data[(leaders_performance_data['username']).isin(add_selectbox)]
+leader_overall_performance_radar_chart(leaders_performance_data)
+
+selected_leaders_performance_data = leaders_overall_performance(selected_leader_ul_data)
+
+leader_overall_performance_radar_chart(selected_leaders_performance_data)
+
+
+
 
 
 
